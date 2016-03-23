@@ -47,7 +47,7 @@ p.associate(ChangeEvent, [(“variable”),”are”,(“change”)])
 
 Note that the concept sequence for ChangeEvent has tuples in addition to strings. These are called attribute specifiers or role specifiers. A role specifier is satisfied if its filler is an instance or subclass of that role in the base concept is referenced. For example, InterestRates satisfied the role specifier (“variable”) in the above concept sequence because the filler of the role in a ChangeEvent is Variable and InterestRates is a subclass of Variable.
 
-“Earth to DMAP”: Connecting DMAP to another program
+## “Earth to DMAP”: Connecting DMAP to another program
 
 A program can tell DMAP Python to parse a sentence simply by calling p.parse(sentence), where sentence is a sequence of words. For example, p.parse([“milton”, “friedman”, “says”, “interest” “rates” “will” “rise”]). The parse method will return a list of all concepts which are reference by the entire sentence.
 
@@ -62,11 +62,11 @@ def printReferenced(object, start, end):
 
 It can be added to the parser with p.defineCallback(object,printReferenced)
 
-Keeping an open mind: DMAP and ambiguity
+## Keeping an open mind: DMAP and ambiguity
 
 DMAP will reference contradictory concepts when ambiguities are involved. DMAP does not resolve contradictions directly. It lets things play themselves out. For example, “check” has many senses, but only the ItemizeBill sense completes the sequence begun by “John paid the …” and thereby leads to an event reference. DMAP references all the senses of “check” but only the ItemizedBill sense leads to anything.
 
-So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the “big” structures, such as events and causal forms (except for debugging, of course). 
+So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the “big” structures, such as events and causal forms (except for debugging, of course).
 
 Thanks for the memory: Connecting DMAP to the Python Class system
 
@@ -86,10 +86,10 @@ child, parent
 Is the parent equal to some abstraction of child (including, perhaps, equal to the parent?
 find
 concept, attribute/values
-A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python. 
+A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python.
 
 
-Implementation Concepts
+## Implementation Concepts
 
 Prediction structures are the basic data structure in DMAP. They link a concept sequence with a base concept. In addition, predictions represent partially recognized sequences, and have:
 
@@ -99,99 +99,16 @@ Prediction structures are the basic data structure in DMAP. They link a concept 
 •	a position in the text where the next item is expected,
 •	a list of attributes/value tuples that have been seen so far (see below).
 
-Target practice
+## Target practice
 
-The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., “interest” in the sequence [“interest”,”rates”], or a class, for example, Variable if the sequence is [(“variable”) will (“change”)]. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information. 
+The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., “interest” in the sequence [“interest”,”rates”], or a class, for example, Variable if the sequence is [(“variable”) will (“change”)]. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information.
 
-DMAP does not actually change a prediction when it advances it. Instead it clones the prediction, updating the sequence and next position appropriately. This is necessary because the original prediction may be advanced more than once by different senses of the text. 
+DMAP does not actually change a prediction when it advances it. Instead it clones the prediction, updating the sequence and next position appropriately. This is necessary because the original prediction may be advanced more than once by different senses of the text.
 
-Features of greatness
+## Features of greatness
 
 If the input item is the same as the target of the prediction, then advancing the prediction is just as described. However, the input might be more specific than the target. For example, the target may be Variable, but the input is InterestRates. Therefore, if the target specifier is a attribute specifier (e.g., (“variable”), then DMAP adds the feature—a pairing of attribute, input—to a list of features stored in the prediction.
 
-All good things come to an end
+## All good things come to an end
 
 When the last item of a sequence has been seen, DMAP is ready to reference an instance of the base concept. DMAP calls find(base,attribute/values) to  determine what this should be, where base is the base concept of the prediction, and attribute/values are the attribute/value pairs collected during prediction advancement.
-
-Just the facts
-
-The following table gives a quick run-down on the components used to implement DMAP in Python:
-
-Class
-Object
-Type
-Function
-DMAP
-parse
-method
-Parses a sequence of text
-
-reference
-method
-Advances predictions on items and abstractions; run callback procedures on same
-
-advance
-method
-Advances a particular prediction
-
-extend
-method
-Adds (potentially) attribute/value pairs to a prediction
-
-target
-method
-Finds the target of a pattern item
-
-associate
-method
-Associates patterns with objects
-
-defineCallback
-method
-Assocate a callback with a method
-
-Clear
-method
-Clears internal parser state on request
-
-Find
-method
-Finds objects with attributes
-
-anytimePredictions,
-dynamicPredictions
-attributes
-Prediction tables
-
-callBacks
-attribute
-Callback table
-
-position
-attribute
-Current position in text
-
-Seen
-attribute
-List of all objects seen
-
-complete
-attribute
-List of all objects whose predictions span the input
-Feature
-attribute
-attribute
-The name of a feature
-
-value
-attribute
-The value of a feature
-Description
-base
-attribute
-The base concept described
-
-features
-attributes
-The list of Features which describe the base
-
