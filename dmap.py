@@ -114,7 +114,7 @@ def all_abstractions(x):
 
 def subclasses_of(parent):
     return filter(
-        lambda (x): is_class(x) and x != parent and issubclass(x, parent),
+        lambda x: is_class(x) and x != parent and issubclass(x, parent),
         globals().itervalues())
 
 # what are the instances of this class?
@@ -122,7 +122,7 @@ def subclasses_of(parent):
 
 
 def instances_of(parent):
-    return filter(lambda (x): isinstance(x, parent), globals().itervalues())
+    return filter(lambda x: isinstance(x, parent), globals().itervalues())
 
 # constraints ...
 # what are the constraints on this attribute?
