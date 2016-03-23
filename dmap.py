@@ -463,10 +463,10 @@ if __name__ == '__main__':
     class Human(Frame):
         pass
 
-    class FHuman(Frame):
+    class FHuman(Human):
         pass
 
-    class MHuman(Frame):
+    class MHuman(Human):
         pass
 
     class Action(Frame):
@@ -480,10 +480,10 @@ if __name__ == '__main__':
         actor = Human
         object = Action
 
-    class John(Human):
+    class John(MHuman):
         pass
 
-    class Mary(Human):
+    class Mary(FHuman):
         pass
 
     p = DMAP()
