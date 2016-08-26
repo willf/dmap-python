@@ -94,11 +94,11 @@ The introspection features of the Python class system need to be extended with f
 
 Prediction structures are the basic data structure in DMAP. They link a concept sequence with a base concept. In addition, predictions represent partially recognized sequences, and have:
 
-•	a base sequence,
-•	a sequence of items yet to be seen,
-•	a position in the text where the sequence began,
-•	a position in the text where the next item is expected,
-•	a list of attributes/value tuples that have been seen so far (see below).
+-	a base sequence,
+-	a sequence of items yet to be seen,
+-	a position in the text where the sequence began,
+-	a position in the text where the next item is expected,
+-	a list of attributes/value tuples that have been seen so far (see below).
 
 ## Target practice
 
