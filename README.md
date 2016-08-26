@@ -56,7 +56,7 @@ Note that the concept sequence for ChangeEvent has tuples in addition to strings
 
 ## “Earth to DMAP”: Connecting DMAP to another program
 
-A program can tell DMAP Python to parse a sentence simply by calling p.parse(sentence), where sentence is a sequence of words. For example, p.parse([“milton”, “friedman”, “says”, “interest” “rates” “will” “rise”]). The parse method will return a list of all concepts which are reference by the entire sentence.
+A program can tell DMAP Python to parse a sentence simply by calling `p.parse(sentence)`, where sentence is a sequence of words. For example, `p.parse('milton friedman says interest rates will rise'.split())`. The parse method will return a list of all concepts which are reference by the entire sentence.
 
 Call-backs can also be defined with:
 
@@ -70,7 +70,7 @@ def printReferenced(object, start, end):
   print “Saw” , object, “from”, start, “to”,end
 ```
 
-It can be added to the parser with p.defineCallback(object,printReferenced)
+It can be added to the parser with `p.defineCallback(object,printReferenced)`
 
 ## Keeping an open mind: DMAP and ambiguity
 
@@ -78,7 +78,7 @@ DMAP will reference contradictory concepts when ambiguities are involved. DMAP d
 
 So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the “big” structures, such as events and causal forms (except for debugging, of course).
 
-Thanks for the memory: Connecting DMAP to the Python Class system
+## Thanks for the memory: Connecting DMAP to the Python Class system
 
 The introspection features of the Python class system need to be extended with four relatively simple methods—well, really three simple methods, and one relatively difficult one. These are:
 
@@ -102,14 +102,14 @@ Prediction structures are the basic data structure in DMAP. They link a concept 
 
 ## Target practice
 
-The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., “interest” in the sequence [“interest”,”rates”], or a class, for example, Variable if the sequence is [(“variable”) will (“change”)]. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information.
+The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., “interest” in the sequence `['interest','rates']`, or a class, for example, Variable if the sequence is `[('variable') will ('change')]`. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information.
 
 DMAP does not actually change a prediction when it advances it. Instead it clones the prediction, updating the sequence and next position appropriately. This is necessary because the original prediction may be advanced more than once by different senses of the text.
 
 ## Features of greatness
 
-If the input item is the same as the target of the prediction, then advancing the prediction is just as described. However, the input might be more specific than the target. For example, the target may be Variable, but the input is InterestRates. Therefore, if the target specifier is a attribute specifier (e.g., (“variable”), then DMAP adds the feature—a pairing of attribute, input—to a list of features stored in the prediction.
+If the input item is the same as the target of the prediction, then advancing the prediction is just as described. However, the input might be more specific than the target. For example, the target may be Variable, but the input is InterestRates. Therefore, if the target specifier is a attribute specifier (e.g., `('variable')`, then DMAP adds the feature—a pairing of attribute, input—to a list of features stored in the prediction.
 
 ## All good things come to an end
 
-When the last item of a sequence has been seen, DMAP is ready to reference an instance of the base concept. DMAP calls find(base,attribute/values) to  determine what this should be, where base is the base concept of the prediction, and attribute/values are the attribute/value pairs collected during prediction advancement.
+When the last item of a sequence has been seen, DMAP is ready to reference an instance of the base concept. DMAP calls `find(base,attribute/values)` to  determine what this should be, where _base_ is the base concept of the prediction, and _attribute/values_ are the attribute/value pairs collected during prediction advancement.
