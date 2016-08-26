@@ -9,21 +9,21 @@ Note: This write-up is based directly on Chris Riesbeck’s write-up of DMAP-Lit
 
 There is one central idea in DMAP. Start with a memory, i.e., an organized body of general and specific conceptual knowledge. For DMAPython, we assume this is represented as Python classes and instances, augmented with certain introspection capabilities.
 
-Next, associate various linguistic patterns with the concepts in memory to which they refer. For example, the English phrase “interest rates” can refer to the concept (class) InterestRates, while a phrase of the form “someone says something” can refer to the concept (class) CommunicationEvent. A phrase may be associated with more than one concept and vice versa.
+Next, associate various linguistic patterns with the concepts in memory to which they refer. For example, the English phrase "interest rates" can refer to the concept (class) `InterestRates`, while a phrase of the form "someone says something" can refer to the concept (class) `CommunicationEvent`. A phrase may be associated with more than one concept and vice versa.
 
 Finally, analyze text with matching the linguistic patterns to the text to find what concepts in memory are being referred to. There’s a standard DMAP algorithm that does this in a fairly efficient, incremental, parallel manner. Other algorithms no doubt exist. The critical point is: Language understanding should be viewed primarily as a semantic recognition process rather than a syntactic construction process.  That is, we’re focused on looking for concepts in memory, not building syntax trees.
 
 ## Direct Memory Access Parsing
 
-DMAP assumes a memory of concepts, events, dialog structures, etc. already exists. When DMAP interprets a language stream, it looks for and reports references to memory structures. For example, reading “interest rates” references InterestRates, and “interest rates are rising” might reference an instance of InterestRatesRising.
+DMAP assumes a memory of concepts, events, dialog structures, etc. already exists. When DMAP interprets a language stream, it looks for and reports references to memory structures. For example, reading "interest rates" references `InterestRates`, and "interest rates are rising" might reference an instance of `InterestRatesRising`.
 
-If InterestRates is a Python class, DMAPython, connecting it to “interest rates” is easy:
+If InterestRates is a Python class, DMAPython, connecting it to "interest rates" is easy:
 
-p.associate(InterestRates,[“interest”,”rates”])
+`p.associate(InterestRates,["interest","rates"])`
 
-where “p” is an instance of a DMAP parser. This attaches the concept sequence [“interest”,”rates”] to the base concept InterestRates.
+where _p_ is an instance of a DMAP parser. This attaches the concept sequence ["interest","rates"] to the base concept InterestRates.
 
-Getting DMAPython to understand “interest rates are rising” is only slightly more complicated. Appropriately enough, most of the work comes in defining the memory structures. Let’s assume the following Python declararations:
+Getting DMAPython to understand "interest rates are rising" is only slightly more complicated. Appropriately enough, most of the work comes in defining the memory structures. Let’s assume the following Python declarations:
 
 ```Python
 class Variable(Framee):
@@ -45,16 +45,16 @@ class ChangeEvent(Event):
   variable = Variable
   change = Change
 ```
-When DMAPython reads “interest rates are rising,” we’d like to say that it saw a `ChangeEven`t with the value of the variable attribute set to `InterestRates` and the value of the change attribute set to `Increase`. This can be accomplished with:
+When DMAPython reads "interest rates are rising," we’d like to say that it saw a `ChangeEvent` with the value of the variable attribute set to `InterestRates` and the value of the change attribute set to `Increase`. This can be accomplished with:
 
 ```Python
 p.associate(Increase,['rising'])
 p.associate(ChangeEvent, [('variable'),'are',('change')])
 ```
 
-Note that the concept sequence for ChangeEvent has tuples in addition to strings. These are called attribute specifiers or role specifiers. A role specifier is satisfied if its filler is an instance or subclass of that role in the base concept is referenced. For example, InterestRates satisfied the role specifier (“variable”) in the above concept sequence because the filler of the role in a ChangeEvent is Variable and InterestRates is a subclass of Variable.
+Note that the concept sequence for `ChangeEvent` has tuples in addition to strings. These are called attribute specifiers or role specifiers. A role specifier is satisfied if its filler is an instance or subclass of that role in the base concept is referenced. For example, InterestRates satisfied the role specifier `("variable")` in the above concept sequence because the filler of the role in a `ChangeEvent` is `Variable` and `InterestRates` is a subclass of `Variable`.
 
-## “Earth to DMAP”: Connecting DMAP to another program
+## "Earth to DMAP": Connecting DMAP to another program
 
 A program can tell DMAP Python to parse a sentence simply by calling `p.parse(sentence)`, where sentence is a sequence of words. For example, `p.parse('milton friedman says interest rates will rise'.split())`. The parse method will return a list of all concepts which are reference by the entire sentence.
 
@@ -67,16 +67,16 @@ so that whenever something which is an instance, subclass, or the class itself i
 
 ```Python
 def printReferenced(object, start, end):
-  print “Saw” , object, “from”, start, “to”,end
+  print "Saw" , object, "from", start, "to",end
 ```
 
 It can be added to the parser with `p.defineCallback(object,printReferenced)`
 
 ## Keeping an open mind: DMAP and ambiguity
 
-DMAP will reference contradictory concepts when ambiguities are involved. DMAP does not resolve contradictions directly. It lets things play themselves out. For example, “check” has many senses, but only the `ItemizeBill` sense completes the sequence begun by “John paid the …” and thereby leads to an event reference. DMAP references all the senses of “check” but only the `ItemizedBill` sense leads to anything.
+DMAP will reference contradictory concepts when ambiguities are involved. DMAP does not resolve contradictions directly. It lets things play themselves out. For example, "check" has many senses, but only the `ItemizeBill` sense completes the sequence begun by "John paid the …" and thereby leads to an event reference. DMAP references all the senses of "check" but only the `ItemizedBill` sense leads to anything.
 
-So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the “big” structures, such as events and causal forms (except for debugging, of course).
+So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the "big" structures, such as events and causal forms (except for debugging, of course).
 
 ## Thanks for the memory: Connecting DMAP to the Python Class system
 
@@ -84,10 +84,10 @@ The introspection features of the Python class system need to be extended with f
 
 | Method | Arguments | Return value |
 | ------ | --------- | ------------ |
-|`attribute_value` | _concept_,_attribute_ | The value of attribute for concept (where “concept” is an instance or class). This is essentially concept.attribute |
-|`all_abstractions` | _concept_ | All of the abstractions of concept, including itself. This is essentially the concept plus its “mro”.|
+|`attribute_value` | _concept_,_attribute_ | The value of attribute for concept (where "concept" is an instance or class). This is essentially concept.attribute |
+|`all_abstractions` | _concept_ | All of the abstractions of concept, including itself. This is essentially the concept plus its "mro".|
 | `isa` | _child_, _parent_ | Is the parent equal to some abstraction of child (including, perhaps, equal to the parent? |
-| `find` | _concept_, _attribute/values_ | A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python. | 
+| `find` | _concept_, _attribute/values_ | A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python. |
 
 
 ## Implementation Concepts
@@ -102,7 +102,7 @@ Prediction structures are the basic data structure in DMAP. They link a concept 
 
 ## Target practice
 
-The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., “interest” in the sequence `['interest','rates']`, or a class, for example, Variable if the sequence is `[('variable') will ('change')]`. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information.
+The target of a prediction is the concept pointed to by the first item in the sequence. The target might be a word, e.g., "interest" in the sequence `['interest','rates']`, or a class, for example, Variable if the sequence is `[('variable') will ('change')]`. When DMAP sees an instance or subclass of a target of a prediction, it advances  the prediction. Advancing means looking for the next item in the sequence, as well as maintaining other bookkeeping information.
 
 DMAP does not actually change a prediction when it advances it. Instead it clones the prediction, updating the sequence and next position appropriately. This is necessary because the original prediction may be advanced more than once by different senses of the text.
 
