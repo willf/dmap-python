@@ -1,5 +1,4 @@
-# dmap-python
-The DMAP conceptual parser in Python
+# The DMAP conceptual parser in Python
 
 Will Fitzgerald
 
