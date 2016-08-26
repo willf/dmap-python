@@ -28,15 +28,19 @@ Getting DMAPython to understand “interest rates are rising” is only slightly
 ```Python
 class Variable(Framee):
   pass
+
 class Change(Frame):
   pass
+
 class Increase(Change):
   pass
+
 class Event(Frame):
   pass
 
 class InterestRates(Variable):
   pass
+
 class ChangeEvent(Event):
   variable = Variable
   change = Change
@@ -44,8 +48,8 @@ class ChangeEvent(Event):
 When DMAPython reads “interest rates are rising,” we’d like to say that it saw a ChangeEvent with the value of the variable attribute set to InterestRates and the value of the change attribute set to Increase. This can be accomplished with:
 
 ```Python
-p.associate(Increase,[“rising”])
-p.associate(ChangeEvent, [(“variable”),”are”,(“change”)])
+p.associate(Increase,['rising'])
+p.associate(ChangeEvent, [('variable'),'are',('change')])
 ```
 
 Note that the concept sequence for ChangeEvent has tuples in addition to strings. These are called attribute specifiers or role specifiers. A role specifier is satisfied if its filler is an instance or subclass of that role in the base concept is referenced. For example, InterestRates satisfied the role specifier (“variable”) in the above concept sequence because the filler of the role in a ChangeEvent is Variable and InterestRates is a subclass of Variable.
