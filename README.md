@@ -45,7 +45,7 @@ class ChangeEvent(Event):
   variable = Variable
   change = Change
 ```
-When DMAPython reads “interest rates are rising,” we’d like to say that it saw a ChangeEvent with the value of the variable attribute set to InterestRates and the value of the change attribute set to Increase. This can be accomplished with:
+When DMAPython reads “interest rates are rising,” we’d like to say that it saw a `ChangeEven`t with the value of the variable attribute set to `InterestRates` and the value of the change attribute set to `Increase`. This can be accomplished with:
 
 ```Python
 p.associate(Increase,['rising'])
@@ -74,7 +74,7 @@ It can be added to the parser with `p.defineCallback(object,printReferenced)`
 
 ## Keeping an open mind: DMAP and ambiguity
 
-DMAP will reference contradictory concepts when ambiguities are involved. DMAP does not resolve contradictions directly. It lets things play themselves out. For example, “check” has many senses, but only the ItemizeBill sense completes the sequence begun by “John paid the …” and thereby leads to an event reference. DMAP references all the senses of “check” but only the ItemizedBill sense leads to anything.
+DMAP will reference contradictory concepts when ambiguities are involved. DMAP does not resolve contradictions directly. It lets things play themselves out. For example, “check” has many senses, but only the `ItemizeBill` sense completes the sequence begun by “John paid the …” and thereby leads to an event reference. DMAP references all the senses of “check” but only the `ItemizedBill` sense leads to anything.
 
 So, just because DMAP references something doesn’t meant that it is really used. It is best to put callbacks on the “big” structures, such as events and causal forms (except for debugging, of course).
 
