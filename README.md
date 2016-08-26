@@ -25,6 +25,7 @@ where “p” is an instance of a DMAP parser. This attaches the concept sequenc
 
 Getting DMAPython to understand “interest rates are rising” is only slightly more complicated. Appropriately enough, most of the work comes in defining the memory structures. Let’s assume the following Python declararations:
 
+```Python
 class Variable(Framee):
   pass
 class Change(Frame):
@@ -39,11 +40,13 @@ class InterestRates(Variable):
 class ChangeEvent(Event):
   variable = Variable
   change = Change
-
+```
 When DMAPython reads “interest rates are rising,” we’d like to say that it saw a ChangeEvent with the value of the variable attribute set to InterestRates and the value of the change attribute set to Increase. This can be accomplished with:
 
+```Python
 p.associate(Increase,[“rising”])
 p.associate(ChangeEvent, [(“variable”),”are”,(“change”)])
+```
 
 Note that the concept sequence for ChangeEvent has tuples in addition to strings. These are called attribute specifiers or role specifiers. A role specifier is satisfied if its filler is an instance or subclass of that role in the base concept is referenced. For example, InterestRates satisfied the role specifier (“variable”) in the above concept sequence because the filler of the role in a ChangeEvent is Variable and InterestRates is a subclass of Variable.
 
@@ -53,12 +56,15 @@ A program can tell DMAP Python to parse a sentence simply by calling p.parse(sen
 
 Call-backs can also be defined with:
 
+```Python
 p.defineCallback(class, function)
-
+```
 so that whenever something which is an instance, subclass, or the class itself is reference, the function is called. The parameters are the concept, and a start and end integer (indices of the position in the text where the sequence began and ended). For example, to print out whenever an object is reference, the following procedure can be defined:
 
+```Python
 def printReferenced(object, start, end):
   print “Saw” , object, “from”, start, “to”,end
+```
 
 It can be added to the parser with p.defineCallback(object,printReferenced)
 
@@ -72,21 +78,12 @@ Thanks for the memory: Connecting DMAP to the Python Class system
 
 The introspection features of the Python class system need to be extended with four relatively simple methods—well, really three simple methods, and one relatively difficult one. These are:
 
-Method
-Arguments
-Return value
-attribute_value
-concept,attribute
-The value of attribute for concept (where “concept” is an instance or class). This is essentially concept.attribute
-all_abstractions
-concept
-All of the abstractions of concept, including itself. This is essentially the concept plus its “mro”.
-isa
-child, parent
-Is the parent equal to some abstraction of child (including, perhaps, equal to the parent?
-find
-concept, attribute/values
-A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python.
+| Method | Arguments | Return value |
+| ------ | --------- | ------------ |
+|`attribute_value` | _concept_,_attribute_ | The value of attribute for concept (where “concept” is an instance or class). This is essentially concept.attribute |
+|`all_abstractions` | _concept_ | All of the abstractions of concept, including itself. This is essentially the concept plus its “mro”.|
+| `isa` | _child_, _parent_ | Is the parent equal to some abstraction of child (including, perhaps, equal to the parent? |
+| `find` | _concept_, _attribute/values_ | A specialization of the concept that has these attributes and values.  This is a bit tricky to do in Python. | 
 
 
 ## Implementation Concepts
